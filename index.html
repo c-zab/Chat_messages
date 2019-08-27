@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset='utf-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<title>Express Linda</title>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	<!-- Compiled and minified CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+	<!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
+	<!-- <script src='main.js'></script> -->
+</head>
+
+<body>
+
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<h1>Hello</h1>
+			</div>
+		</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<input id="name" type="text" class="validate">
+					<label for="name">Name</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<input id="message" type="text" class="validate">
+					<label for="message">Message</label>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s6">
+					<button
+						class="btn waves-effect waves-light"
+						id="send"
+						>Submit
+					</button>
+				</div>
+			</div>
+		<div id="messages">
+		</div>
+	</div>
+
+	<!-- Compiled and minified JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+	crossorigin="anonymous"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io()
+			$(() => {
+				$('#send').click(() => {
+					let name = $('#name').val();
+					let message = $('#message').val();
+					postMessage({name: name, message: message})
+				})
+				getMessages()
+			})
+
+			socket.on('message', addMessage)
+
+			function addMessage(message){
+				$('#messages').append(`<h4> ${message.name} </h4> <p> ${message.message} </p>`)
+			}
+
+			function getMessages() {
+				$.get('http://localhost:3000/messages', (data) => {
+					data.forEach(addMessage);
+				})
+			}
+
+			function postMessage(message) {
+				$.post('http://localhost:3000/messages', message)
+			}
+
+		</script>
+</body>
+
+</html>

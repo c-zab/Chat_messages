@@ -42,6 +42,11 @@
 					</button>
 				</div>
 			</div>
+			<button
+			class="btn waves-effect waves-light"
+			id="go"
+			>Go
+		</button>
 		<div id="messages">
 		</div>
 	</div>
@@ -57,9 +62,10 @@
 		var socket = io()
 			$(() => {
 				$('#send').click(() => {
-					let name = $('#name').val();
-					let message = $('#message').val();
 					postMessage({name: name, message: message})
+				})
+				$('#go').click(() => {
+					goNow('/about')
 				})
 				getMessages()
 			})
@@ -78,6 +84,10 @@
 
 			function postMessage(message) {
 				$.post('http://localhost:3000/messages', message)
+			}
+
+			function goNow() {
+				$.get('http://localhost:3000/about')
 			}
 
 		</script>
